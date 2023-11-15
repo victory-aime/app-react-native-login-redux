@@ -1,0 +1,13 @@
+{
+  "title": "Bienvenue !",
+  "Title": "Créer un compte",
+  "username": "nom d'utilisateur",
+  "email": "E-mail",
+  "password": "Mot de passe",
+  "usernameInput": "Entrez votre nom d'utilisateur...",
+  "EmailInput": "Entrez votre email...",
+  "passwordInput": "Entrez votre mot de passe...",
+  "SignUpButton": "Inscrivez-vous",
+  "SignUpTextEnd": "Déjà un compte ?",
+  "SignUpButtonEnd": "Connexion"
+}

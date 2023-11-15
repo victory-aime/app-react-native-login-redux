@@ -1,0 +1,13 @@
+{
+  "title": "Sign Up and enjoy with us !",
+  "Title": "Create an account",
+  "username": "username",
+  "email": "E-mail",
+  "password": "Password",
+  "usernameInput": "Enter your username...",
+  "EmailInput": "Enter your email...",
+  "passwordInput": "Enter your password...",
+  "SignUpButton": "Sign Up",
+  "SignUpTextEnd": "Already an account?",
+  "SignUpButtonEnd": "Sign in"
+}

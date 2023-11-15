@@ -1,0 +1,12 @@
+{
+  "title": "Bienvenue !",
+  "Title": "Entrez sur votre compte",
+  "email": "E-mail",
+  "mot de passe": "Mot de passe",
+  "passwordLabel": "Entrez votre mot de passe...",
+  "EmailLabel": "Entrez votre email...",
+  "loginButton": "Connexion",
+  "loginTextEnd": "Vous n'avez pas de compte ?",
+  "loginTextForgotPassword": "Mot de passe oublié ?",
+  "loginButtonEnd": "Inscription"
+}

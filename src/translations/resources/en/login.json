@@ -1,0 +1,13 @@
+{
+  "title": "Welcome back!",
+  "Title": "Enter to your account",
+  "email":"E-mail",
+  "password":"Password",
+  "passwordLabel":"Enter your Password...",
+  "EmailLabel":"Enter your email...",
+  "loginButton":"Login",
+  "loginTextEnd":"Dont have an account?",
+  "loginTextForgotPassword":"Forgot the password?",
+  "loginButtonEnd":"Sign Up"
+
+}
