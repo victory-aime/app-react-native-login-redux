@@ -6,17 +6,18 @@ import {
   TextInput,
   Text,
   ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-
 import { useTheme } from '../../hooks';
 import { changeTheme, ThemeState } from '../../store/theme';
 import i18next from 'i18next';
 import { Colors } from '../../theme/Variables';
+import { FIREBASE_APP, FIREBASE_AUTH } from 'Test/src/Firebase/FirebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-
-const Register = ({ navigation } : any) => {
+const Register = ({ navigation }: any) => {
   const { t } = useTranslation(['signUp']);
   const {
     Common,
@@ -27,8 +28,6 @@ const Register = ({ navigation } : any) => {
     darkMode: isDark,
   } = useTheme();
   const [isSunIcon, setIsSunIcon] = useState(isDark);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
   const onChangeTheme = ({ theme, darkMode }: Partial<ThemeState>) => {
@@ -38,6 +37,26 @@ const Register = ({ navigation } : any) => {
 
   const onChangeLanguage = (lang: 'fr' | 'en') => {
     i18next.changeLanguage(lang);
+  };
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const auth = FIREBASE_AUTH;
+
+  const SignUp = async () => {
+    // implementation of connection with firebase and add user to firebase
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      if (response) {
+        navigation.navigate('Login');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -79,6 +98,7 @@ const Register = ({ navigation } : any) => {
           {t('signUp:title')}
         </Text>
       </View>
+
       <View
         style={[
           Layout.fill,
@@ -96,8 +116,9 @@ const Register = ({ navigation } : any) => {
         >
           {t('signUp:Title')}
         </Text>
-        <View>
-          <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
+        <KeyboardAvoidingView behavior="padding">
+          <View>
+            {/* <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
             {t('signUp:username')}
           </Text>
 
@@ -106,47 +127,46 @@ const Register = ({ navigation } : any) => {
             placeholder={t('signUp:usernameInput')}
             value={email}
             onChangeText={text => setEmail(text)}
-          />
+          />*/}
 
-          <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
-            {t('signUp:email')}
-          </Text>
-
-          <TextInput
-            style={[Common.textInput, Gutters.smallBMargin]}
-            placeholder={t('signUp:EmailInput')}
-            value={email}
-            onChangeText={text => setEmail(text)}
-          />
-
-          <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
-            {t('signUp:password')}
-          </Text>
-
-          <TextInput
-            style={[Common.textInput, Gutters.smallBMargin]}
-            placeholder={t('signUp:passwordInput')}
-            secureTextEntry={true}
-            value={password}
-            onChangeText={text => setPassword(text)}
-          />
-
-          <TouchableOpacity
-            style={[Gutters.regularTMargin]}
-            onPress={() => navigation.navigate('Dashboard')}
-          >
-            <Text
-              style={[
-                Common.button.rounded,
-                Fonts.textBold,
-                Fonts.textCenter,
-                Fonts.textWhite,
-              ]}
-            >
-              {t('signUp:SignUpButton')}
+            <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
+              {t('signUp:email')}
             </Text>
-          </TouchableOpacity>
-        </View>
+
+            <TextInput
+              style={[Common.textInput, Gutters.smallBMargin]}
+              placeholder={t('signUp:EmailInput')}
+              value={email}
+              onChangeText={text => setEmail(text)}
+            />
+
+            <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
+              {t('signUp:password')}
+            </Text>
+
+            <TextInput
+              style={[Common.textInput, Gutters.smallBMargin]}
+              placeholder={t('signUp:passwordInput')}
+              secureTextEntry={true}
+              value={password}
+              onChangeText={text => setPassword(text)}
+            />
+
+            <TouchableOpacity style={[Gutters.regularTMargin]} onPress={SignUp}>
+              <Text
+                style={[
+                  Common.button.rounded,
+                  Fonts.textBold,
+                  Fonts.textCenter,
+                  Fonts.textWhite,
+                ]}
+              >
+                {t('signUp:SignUpButton')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+
         <View style={[Layout.rowCenter, Gutters.smallTMargin]}>
           <Text>{t('SignUpTextEnd')} </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>

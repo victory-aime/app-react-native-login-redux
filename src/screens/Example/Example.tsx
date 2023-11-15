@@ -21,7 +21,7 @@ import Dashboard from '../Dashboard/Dashboard';
 
 const Example = ({ navigation }: ApplicationScreenProps) => {
   const { t } = useTranslation(['welcome']);
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
   const {
     Common,
     Fonts,

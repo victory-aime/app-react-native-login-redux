@@ -112,8 +112,8 @@ import { logout } from '../../store/authSlice'
 
 const Dashboard = () => {
   // Utilisez le sélecteur pour récupérer l'état d'authentification du store Redux
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-  const username = useSelector(state => state.auth.username);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.email);
  
 
   const dispatch = useDispatch();
@@ -137,7 +137,7 @@ const Dashboard = () => {
   // Si l'utilisateur est authentifié, affichez le tableau de bord avec les informations de l'utilisateur
   return (
     <View>
-      <Text>Bienvenue, {username}!</Text>
+      <Text>Bienvenue, {user}!</Text>
       <TouchableOpacity onPress={handleLogout}>
         <Text>Déconnexion</Text>
       </TouchableOpacity>
