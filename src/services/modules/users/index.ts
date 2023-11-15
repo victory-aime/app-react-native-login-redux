@@ -1,4 +1,4 @@
-/*import { api } from '../../api';
+import { api } from '../../api';
 
 export type User = {
   id: number;
@@ -20,4 +20,3 @@ export const userApi = api.injectEndpoints({
 });
 
 export const { useLoginMutation } = userApi;
-*/

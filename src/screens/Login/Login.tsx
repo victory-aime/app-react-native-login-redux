@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Image, TextInput, Text } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  Text,
+  Alert,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../hooks';
 import { changeTheme, ThemeState } from '../../store/theme';
 import i18next from 'i18next';
 import { Colors } from '../../theme/Variables';
-import { FIREBASE_APP, FIREBASE_AUTH } from 'Test/src/Firebase/FirebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useLoginMutation } from 'Test/src/services/modules/users';
+
 import { loginSuccess } from 'Test/src/store/authSlice';
 
 const Login = ({ navigation }: any) => {
@@ -21,37 +28,42 @@ const Login = ({ navigation }: any) => {
     darkMode: isDark,
   } = useTheme();
   const [isSunIcon, setIsSunIcon] = useState(isDark);
+  const [email, setEmail] = useState('kminchelle');
+  const [password, setPassword] = useState('0lelplR');
   const dispatch = useDispatch();
+  const [login, {  error }] = useLoginMutation();
+
   const onChangeTheme = ({ theme, darkMode }: Partial<ThemeState>) => {
     dispatch(changeTheme({ theme, darkMode }));
     setIsSunIcon(darkMode);
   };
+
   const onChangeLanguage = (lang: 'fr' | 'en') => {
     i18next.changeLanguage(lang);
   };
 
-  const [email, setEmail] = useState('anotheruser@test.com');
-  const [password, setPassword] = useState('azerty');
-  const auth = FIREBASE_AUTH;
 
-  const SignIn = async () => {
+
+  const handleSubmit = async () => {
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      // Appel de la mutation de login
+      const result = await login({ username: email, password });
 
-      // Si la connexion réussit, dispatch l'action loginSuccess
-      if (response) {
-        dispatch(
-          loginSuccess({
-            token: response._tokenResponse.idToken,
-            email: response.user.email,
-          }),
-        );
+      // Vérification du résultat de la mutation
+      if (result.data) {
+        // Authentification réussie, dispatch de l'action loginSuccess
+        dispatch(loginSuccess({ token: result.data.token, username: result.data.username }));
+        //navigation.navigate('Dashboard', { user: result.data });
+        // Pas besoin de navigation ici, la redirection peut être gérée à partir du Redux Store
+      } else if (result.error) {
+        // Gestion des erreurs de l'API
+        Alert.alert(`Login failed: ${error}`);
       }
     } catch (error) {
-      console.log(error);
+      // Gestion des erreurs inattendues
+      Alert.alert('An unexpected error occurred. Please try again.');
     }
   };
-
   return (
     <View style={[Layout.fill, { backgroundColor: Colors.transparent }]}>
       <View style={[Layout.alignItemsEnd, Gutters.largeRMargin]}>
@@ -115,7 +127,6 @@ const Login = ({ navigation }: any) => {
 
           <TextInput
             style={[Common.textInput, Gutters.smallBMargin]}
-            autoCapitalize="none"
             placeholder={t('login:EmailLabel')}
             value={email}
             onChangeText={text => setEmail(text)}
@@ -138,7 +149,10 @@ const Login = ({ navigation }: any) => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[Gutters.regularTMargin]} onPress={SignIn}>
+          <TouchableOpacity
+            style={[Gutters.regularTMargin]}
+            onPress={handleSubmit}
+          >
             <Text
               style={[
                 Common.button.rounded,
@@ -163,10 +177,3 @@ const Login = ({ navigation }: any) => {
 };
 
 export default Login;
-function singInWithEmailAndPassword(
-  auth: FirebaseApp,
-  email: string,
-  password: string,
-) {
-  throw new Error('Function not implemented.');
-}

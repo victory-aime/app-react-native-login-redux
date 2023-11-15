@@ -113,7 +113,7 @@ import { logout } from '../../store/authSlice'
 const Dashboard = () => {
   // Utilisez le sélecteur pour récupérer l'état d'authentification du store Redux
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.email);
+  const user = useSelector((state) => state.auth.username);
  
 
   const dispatch = useDispatch();
