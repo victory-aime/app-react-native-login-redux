@@ -7,15 +7,16 @@ import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDV46jeDDCs-6D5qz4rrp6Bz-UEpll3ASI',
-  authDomain: 'react-native-firebase-au-4bd45.firebaseapp.com',
-  projectId: 'react-native-firebase-au-4bd45',
-  storageBucket: 'react-native-firebase-au-4bd45.appspot.com',
-  messagingSenderId: '887719449368',
-  appId: '1:887719449368:web:f75c9fc5f23638a06f446d',
+  apiKey: 'AIzaSyBRAK1otYMBucflyfZUmFcB9WlSkbRcZ9w',
+  authDomain: 'proxym-react-native.firebaseapp.com',
+  projectId: 'proxym-react-native',
+  storageBucket: 'proxym-react-native.appspot.com',
+  messagingSenderId: '235188946213',
+  appId: '1:235188946213:web:6f3f8d3702eed56b5686cc',
 };
 
 // Initialize Firebase
+
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
 export const FIRESTORE_DB = getFirestore(FIREBASE_APP);

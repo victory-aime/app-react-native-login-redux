@@ -81,7 +81,6 @@ const Dashboard = ({ route }: any) => {
 export default Dashboard;
 */
 
-
 /*import React from 'react';
 import { View, Text, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -108,13 +107,23 @@ export default Dashboard;
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../store/authSlice'
+import { logout } from '../../store/authSlice';
+import useTheme from 'Test/src/hooks/useTheme';
+import { text } from 'stream/consumers';
 
 const Dashboard = () => {
+  const {
+    Common,
+    Gutters,
+    Fonts,
+    Layout,
+    Images,
+    darkMode: isDark,
+  } = useTheme();
+
   // Utilisez le sélecteur pour récupérer l'état d'authentification du store Redux
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const user = useSelector((state) => state.auth.username);
- 
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const user = useSelector(state => state.auth.email);
 
   const dispatch = useDispatch();
 
@@ -129,7 +138,10 @@ const Dashboard = () => {
     // Rediriger ou afficher un message
     return (
       <View>
-        <Text>Utilisateur non authentifié. Redirection ou affichage d'un message approprié.</Text>
+        <Text>
+          Utilisateur non authentifié. Redirection ou affichage d'un message
+          approprié.
+        </Text>
       </View>
     );
   }
@@ -137,14 +149,12 @@ const Dashboard = () => {
   // Si l'utilisateur est authentifié, affichez le tableau de bord avec les informations de l'utilisateur
   return (
     <View>
-      <Text>Bienvenue, {user}!</Text>
+      <Text style={[Fonts.textCenter]}>Bienvenue, {user}!</Text>
       <TouchableOpacity onPress={handleLogout}>
         <Text>Déconnexion</Text>
       </TouchableOpacity>
-      
     </View>
   );
 };
 
 export default Dashboard;
-

@@ -4,11 +4,14 @@ import { useTheme } from '../../hooks';
 import { Brand } from '../../components';
 import { setDefaultTheme } from '../../store/theme';
 import { ApplicationScreenProps } from '../../../@types/navigation';
+import { initializeFirebase } from 'Test/src/Firebase/FirebaseConfig';
 
 const Startup = ({ navigation }: ApplicationScreenProps) => {
   const { Layout, Gutters } = useTheme();
+  
 
   const init = async () => {
+    initializeFirebase()
     await new Promise(resolve =>
       setTimeout(() => {
         resolve(true);

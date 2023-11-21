@@ -39,18 +39,29 @@ const MainNavigator = ({ navigation }: ApplicationScreenProps) => {
 
 export default MainNavigator;*/
 
-
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSelector } from 'react-redux';
-import { Login, Dashboard, Register } from '../screens/';
+import { Login, Dashboard, Register, LinkHandler } from '../screens/';
 import { ApplicationScreenProps } from 'Test/@types/navigation';
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../Firebase/FirebaseConfig';
 
 const Stack = createStackNavigator();
 
 const MainNavigator = ({ navigation }: ApplicationScreenProps) => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+  const [authenticated, setAuthenticated] = useState<User | null>(null);
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, User => {
+      if (!User) {
+        //console.warn(User);
+      } else {
+        console.warn('user', setAuthenticated);
+      }
+    });
+  });
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -59,6 +70,7 @@ const MainNavigator = ({ navigation }: ApplicationScreenProps) => {
       ) : (
         <>
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="LinkHandler" component={LinkHandler} />
           <Stack.Screen name="SignUp" component={Register} />
         </>
       )}

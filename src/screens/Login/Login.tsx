@@ -1,21 +1,15 @@
-import React, { useState } from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  Text,
-  Alert,
-} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TouchableOpacity, Image, TextInput, Text } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../hooks';
 import { changeTheme, ThemeState } from '../../store/theme';
 import i18next from 'i18next';
 import { Colors } from '../../theme/Variables';
-import { useLoginMutation } from 'Test/src/services/modules/users';
-
-import { loginSuccess } from 'Test/src/store/authSlice';
+import { FIREBASE_AUTH } from 'Test/src/Firebase/FirebaseConfig';
+import 'firebase/auth';
+import firebase from 'firebase/app';
+import { sendSignInLinkToEmail, signInWithEmailLink } from 'firebase/auth';
 
 const Login = ({ navigation }: any) => {
   const { t } = useTranslation(['login']);
@@ -28,42 +22,58 @@ const Login = ({ navigation }: any) => {
     darkMode: isDark,
   } = useTheme();
   const [isSunIcon, setIsSunIcon] = useState(isDark);
-  const [email, setEmail] = useState('kminchelle');
-  const [password, setPassword] = useState('0lelplR');
   const dispatch = useDispatch();
-  const [login, {  error }] = useLoginMutation();
-
   const onChangeTheme = ({ theme, darkMode }: Partial<ThemeState>) => {
     dispatch(changeTheme({ theme, darkMode }));
     setIsSunIcon(darkMode);
   };
-
   const onChangeLanguage = (lang: 'fr' | 'en') => {
     i18next.changeLanguage(lang);
   };
+  const [email, setEmail] = useState('azerty2@yopmail.com');
+  const auth = FIREBASE_AUTH;
 
-
-
-  const handleSubmit = async () => {
+  const sendSignInLink = async () => {
     try {
-      // Appel de la mutation de login
-      const result = await login({ username: email, password });
-
-      // Vérification du résultat de la mutation
-      if (result.data) {
-        // Authentification réussie, dispatch de l'action loginSuccess
-        dispatch(loginSuccess({ token: result.data.token, username: result.data.username }));
-        //navigation.navigate('Dashboard', { user: result.data });
-        // Pas besoin de navigation ici, la redirection peut être gérée à partir du Redux Store
-      } else if (result.error) {
-        // Gestion des erreurs de l'API
-        Alert.alert(`Login failed: ${error}`);
-      }
-    } catch (error) {
-      // Gestion des erreurs inattendues
-      Alert.alert('An unexpected error occurred. Please try again.');
+      await sendSignInLinkToEmail(auth, email, {
+        url: 'https://proxymitauthdemo.page.link/H3Ed',
+        handleCodeInApp: true,
+      });
+    } catch (e: any) {
+      console.log("Erreur lors de l'envoi du lien de connexion :", e.error);
     }
   };
+  
+
+  useEffect(() => {
+    const handleLink = async (link: string | undefined) => {
+      try {
+        const result = await signInWithEmailLink(auth, email, link);
+        console.warn(result);
+        console.warn(link);
+        if (result.user.emailVerified) {
+          // Utilisateur connecté et e-mail vérifié
+          console.log('Connexion réussie!');
+          // Redirigez l'utilisateur vers la page d'accueil ou une autre page
+          // navigation.navigate('Home');
+        } else {
+          // L'e-mail n'est pas encore vérifié
+          console.log("L'e-mail n'est pas encore vérifié.");
+        }
+      } catch (error) {
+        console.log('Erreur lors de la connexion avec le lien e-mail :', error);
+      }
+    };
+
+    //const unsubscribe = auth.onLink(handleLink);
+
+    /*return () => {
+      unsubscribe();
+    };*/
+  }, [email]);
+
+
+
   return (
     <View style={[Layout.fill, { backgroundColor: Colors.transparent }]}>
       <View style={[Layout.alignItemsEnd, Gutters.largeRMargin]}>
@@ -127,22 +137,12 @@ const Login = ({ navigation }: any) => {
 
           <TextInput
             style={[Common.textInput, Gutters.smallBMargin]}
+            autoCapitalize="none"
             placeholder={t('login:EmailLabel')}
             value={email}
             onChangeText={text => setEmail(text)}
           />
 
-          <Text style={[Fonts.textRegular, Gutters.smallBMargin]}>
-            {t('login:password')}
-          </Text>
-
-          <TextInput
-            style={[Common.textInput, Gutters.smallBMargin]}
-            placeholder={t('login:passwordLabel')}
-            //secureTextEntry={true}
-            value={password}
-            onChangeText={text => setPassword(text)}
-          />
           <TouchableOpacity>
             <Text style={[Fonts.textRight]}>
               {t('loginTextForgotPassword')}
@@ -151,7 +151,7 @@ const Login = ({ navigation }: any) => {
 
           <TouchableOpacity
             style={[Gutters.regularTMargin]}
-            onPress={handleSubmit}
+            onPress={sendSignInLink}
           >
             <Text
               style={[

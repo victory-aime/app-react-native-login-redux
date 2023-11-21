@@ -51,6 +51,7 @@ const Register = ({ navigation }: any) => {
         email,
         password,
       );
+      console.warn(response)
       if (response) {
         navigation.navigate('Login');
       }

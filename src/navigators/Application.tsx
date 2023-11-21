@@ -21,7 +21,6 @@ const ApplicationNavigator = () => {
   const navigationRef = useNavigationContainerRef();
 
   useFlipper(navigationRef);
-
   return (
     <SafeAreaView style={[Layout.fill, { backgroundColor: colors.card }]}>
       <NavigationContainer theme={NavigationTheme} ref={navigationRef}>
